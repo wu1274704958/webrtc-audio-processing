@@ -1,0 +1,14 @@
+add_library(WebRTC::AudioProcessing SHARED IMPORTED GLOBAL)
+
+
+set_target_properties(WebRTC::AudioProcessing PROPERTIES 
+    INTERFACE_INCLUDE_DIRECTORIES   "${CMAKE_CURRENT_SOURCE_DIR}"
+    INTERFACE_INCLUDE_DIRECTORIES  "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
+    )
+
+set_property(TARGET WebRTC::AudioProcessing PROPERTY
+    IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/build/webrtc/modules/audio_processing/webrtc-audio-processing-2.lib")
+
+set_property(TARGET WebRTC::AudioProcessing PROPERTY  
+    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/build/webrtc/modules/audio_processing/webrtc-audio-processing-2.dll"
+)
