@@ -109,5 +109,5 @@ target_compile_definitions(WebRTC::AudioProcessing INTERFACE
 
 
 if(NOT EXISTS "${WEBRTC_LIB_DIR}/webrtc-audio-processing-2-1.dll")
-    message(FATAL_ERROR "WebRTC 库文件未找到，请检查构建路径")
+    message(FATAL_ERROR "WebRTC library not found!")
 endif()
