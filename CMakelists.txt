@@ -1,14 +1,113 @@
+set(WEBRTC_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/webrtc/modules/audio_processing")
+set(ABSEIL_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/subprojects/abseil-cpp-20240722.0")
+
 add_library(WebRTC::AudioProcessing SHARED IMPORTED GLOBAL)
-
-
-set_target_properties(WebRTC::AudioProcessing PROPERTIES 
-    INTERFACE_INCLUDE_DIRECTORIES   "${CMAKE_CURRENT_SOURCE_DIR}"
-    INTERFACE_INCLUDE_DIRECTORIES  "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
-    )
-
-set_property(TARGET WebRTC::AudioProcessing PROPERTY
-    IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/build/webrtc/modules/audio_processing/webrtc-audio-processing-2.lib")
-
-set_property(TARGET WebRTC::AudioProcessing PROPERTY  
-    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/build/webrtc/modules/audio_processing/webrtc-audio-processing-2.dll"
+set_target_properties(WebRTC::AudioProcessing PROPERTIES
+    IMPORTED_IMPLIB "${WEBRTC_LIB_DIR}/webrtc-audio-processing-2.lib"
+    IMPORTED_LOCATION "${WEBRTC_LIB_DIR}/webrtc-audio-processing-2-1.dll"
+    INTERFACE_INCLUDE_DIRECTORIES 
+        "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
 )
+
+add_library(absl_base STATIC IMPORTED)
+set_target_properties(absl_base PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_base.a"
+)
+
+add_library(absl_container STATIC IMPORTED)
+set_target_properties(absl_container PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_container.a"
+)
+
+add_library(absl_crc STATIC IMPORTED)
+set_target_properties(absl_crc PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_crc.a"
+)
+
+add_library(absl_debugging STATIC IMPORTED)
+set_target_properties(absl_debugging PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_debugging.a"
+)
+
+add_library(absl_flags STATIC IMPORTED)
+set_target_properties(absl_flags PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_flags.a"
+)
+
+add_library(absl_hash STATIC IMPORTED)
+set_target_properties(absl_hash PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_hash.a"
+)
+
+add_library(absl_log STATIC IMPORTED)
+set_target_properties(absl_log PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_log.a"
+)
+
+add_library(absl_profiling STATIC IMPORTED)
+set_target_properties(absl_profiling PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_profiling.a"
+)
+
+add_library(absl_random STATIC IMPORTED)
+set_target_properties(absl_random PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_random.a"
+)
+
+add_library(absl_status STATIC IMPORTED)
+set_target_properties(absl_status PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_status.a"
+)
+
+add_library(absl_strings STATIC IMPORTED)
+set_target_properties(absl_strings PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_strings.a"
+)
+
+add_library(absl_synchronization STATIC IMPORTED)
+set_target_properties(absl_synchronization PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_synchronization.a"
+)
+
+add_library(absl_time STATIC IMPORTED)
+set_target_properties(absl_time PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_time.a"
+)
+
+add_library(absl_types STATIC IMPORTED)
+set_target_properties(absl_types PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_types.a"
+)
+
+add_library(absl_numeric STATIC IMPORTED)
+set_target_properties(absl_numeric PROPERTIES
+    IMPORTED_LOCATION "${ABSEIL_LIB_DIR}/libabsl_numeric.a"
+)
+
+target_link_libraries(WebRTC::AudioProcessing INTERFACE
+    absl_base
+    absl_container
+    absl_crc
+    absl_debugging
+    absl_flags
+    absl_hash
+    absl_log
+    absl_profiling
+    absl_random
+    absl_status
+    absl_strings
+    absl_synchronization
+    absl_time
+    absl_types
+    absl_numeric
+)
+
+target_compile_definitions(WebRTC::AudioProcessing INTERFACE 
+    ABSL_NULLABILITY_COMPATIBLE=
+    WEBRTC_APM_DEBUG_DUMP=0
+)
+
+
+if(NOT EXISTS "${WEBRTC_LIB_DIR}/webrtc-audio-processing-2-1.dll")
+    message(FATAL_ERROR "WebRTC 库文件未找到，请检查构建路径")
+endif()
